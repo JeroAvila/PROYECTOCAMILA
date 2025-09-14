@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ramo de Flores Amarillas</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(to bottom, #0c0c1e, #1a1a3e);
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .message-container {
+            background-color: rgba(10, 10, 10, 0.85);
+            padding: 25px 50px;
+            border-radius: 15px;
+            margin-bottom: 40px;
+            box-shadow: 0 0 25px rgba(255, 215, 0, 0.6);
+            position: relative;
+            z-index: 20;
+            animation: float 4s ease-in-out infinite;
+            border: 1px solid rgba(255, 255, 0, 0.3);
+        }
+        
+        .message {
+            color: #fff;
+            font-size: 28px;
+            text-align: center;
+            text-shadow: 0 0 12px rgba(255, 255, 0, 0.8);
+            letter-spacing: 1.5px;
+            font-weight: 500;
+        }
+        
+        .flowers-container {
+            position: relative;
+            width: 300px;
+            height: 250px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+        }
+        
+        /* Diseño mejorado de flores */
+        .flower {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            animation: sway 5s ease-in-out infinite;
+        }
+        
+        .flower-center {
+            width: 16px;
+            height: 16px;
+            background: radial-gradient(circle, #b8860b, #ffd700);
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 3;
+            box-shadow: 0 0 8px rgba(255, 204, 0, 0.5);
+        }
+        
+        .petal {
+            position: absolute;
+            width: 24px;
+            height: 36px;
+            background: radial-gradient(ellipse, #ffeb3b, #ffc107);
+            border-radius: 50% 50% 50% 50%;
+            transform-origin: bottom center;
+            box-shadow: 0 0 6px rgba(255, 193, 7, 0.4);
+            top: 50%;
+            left: 50%;
+            margin-top: -18px;
+            margin-left: -12px;
+        }
+        
+        .stem {
+            position: absolute;
+            width: 4px;
+            height: 80px;
+            background: linear-gradient(to bottom, #4caf50, #2e7d32);
+            top: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 2px;
+            z-index: 1;
+        }
+        
+        .leaf {
+            position: absolute;
+            width: 16px;
+            height: 10px;
+            background: linear-gradient(to right, #4caf50, #66bb6a);
+            border-radius: 50% 0 50% 50%;
+            transform-origin: left bottom;
+            top: 65px;
+        }
+        
+        /* Posicionamiento de las flores en forma de ramo muy centrado */
+        .flower:nth-child(1) { top: 40px; left: 125px; animation-delay: 0s; }
+        .flower:nth-child(2) { top: 60px; left: 110px; animation-delay: 0.7s; }
+        .flower:nth-child(3) { top: 60px; left: 140px; animation-delay: 1.4s; }
+        .flower:nth-child(4) { top: 90px; left: 100px; animation-delay: 2.1s; }
+        .flower:nth-child(5) { top: 90px; left: 150px; animation-delay: 2.8s; }
+        .flower:nth-child(6) { top: 120px; left: 125px; animation-delay: 3.5s; }
+        .flower:nth-child(7) { top: 140px; left: 115px; animation-delay: 0.5s; }
+        .flower:nth-child(8) { top: 140px; left: 135px; animation-delay: 1.2s; }
+        
+        /* Animaciones */
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0.5deg); }
+            50% { transform: translateY(-12px) rotate(-0.5deg); }
+        }
+        
+        @keyframes sway {
+            0%, 100% { transform: rotate(-2deg); }
+            50% { transform: rotate(2deg); }
+        }
+        
+        /* Efecto de partículas de luz */
+        .particle {
+            position: absolute;
+            background-color: rgba(255, 255, 100, 0.7);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: fall linear infinite;
+        }
+        
+        @keyframes fall {
+            to { 
+                transform: translateY(100vh) rotate(360deg); 
+                opacity: 0;
+            }
+        }
+        
+        /* Control de audio */
+        .audio-control {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 10px;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+            transition: all 0.3s ease;
+        }
+        
+        .audio-control:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
+        }
+        
+        .audio-icon {
+            color: #ffd700;
+            font-size: 24px;
+        }
+        
+        .volume-slider {
+            position: absolute;
+            bottom: 70px;
+            right: 5px;
+            width: 30px;
+            height: 120px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 15px;
+            padding: 10px 0;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .audio-control:hover .volume-slider {
+            display: flex;
+        }
+        
+        input[type="range"] {
+            -webkit-appearance: slider-vertical;
+            width: 10px;
+            height: 100px;
+            padding: 0 5px;
+        }
+        
+        /* Nota de música flotante */
+        .music-note {
+            position: absolute;
+            color: rgba(255, 215, 0, 0.7);
+            font-size: 20px;
+            opacity: 0;
+            animation: noteFloat 8s linear infinite;
+        }
+        
+        @keyframes noteFloat {
+            0% {
+                opacity: 0;
+                transform: translateY(0) rotate(0deg);
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-100px) rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="message-container">
+        <h1 class="message">Este mes no serás espectadora hermosa</h1>
+    </div>
+    
+    <div class="flowers-container">
+        <!-- Las flores se generarán con JavaScript -->
+    </div>
+    
+    <!-- Control de audio -->
+    <div class="audio-control" id="audioControl">
+        <div class="audio-icon">♪</div>
+        <div class="volume-slider">
+            <input type="range" id="volumeSlider" min="0" max="1" step="0.1" value="0.5" orient="vertical">
+        </div>
+    </div>
+    
+    <!-- Elemento de audio (oculto) -->
+    <audio id="backgroundMusic" loop>
+        <source src="c:\Users\thoma\Downloads\para ella\Rauw Alejandro - Carita Linda (Official Video).mp3" type="audio/mpeg">
+        Tu navegador no soporta el elemento de audio.
+    </audio>
+
+    <script>
+        // Crear flores con diseño mejorado
+        const flowersContainer = document.querySelector('.flowers-container');
+        const flowerCount = 8;
+        
+        for (let i = 0; i < flowerCount; i++) {
+            const flower = document.createElement('div');
+            flower.className = 'flower';
+            
+            // Crear centro de la flor
+            const center = document.createElement('div');
+            center.className = 'flower-center';
+            flower.appendChild(center);
+            
+            // Crear pétalos para cada flor (6 pétalos por flor)
+            for (let j = 0; j < 6; j++) {
+                const petal = document.createElement('div');
+                petal.className = 'petal';
+                // Posicionar pétalos en círculo
+                const angle = (j / 6) * Math.PI * 2;
+                petal.style.transform = `rotate(${angle}rad)`;
+                flower.appendChild(petal);
+            }
+            
+            // Añadir tallo
+            const stem = document.createElement('div');
+            stem.className = 'stem';
+            flower.appendChild(stem);
+            
+            // Añadir hojas (2 por flor)
+            for (let k = 0; k < 2; k++) {
+                const leaf = document.createElement('div');
+                leaf.className = 'leaf';
+                leaf.style.left = `${k === 0 ? 4 : 24}px`;
+                leaf.style.transform = `rotate(${k === 0 ? -30 : 150}deg)`;
+                flower.appendChild(leaf);
+            }
+            
+            flowersContainer.appendChild(flower);
+        }
+        
+        // Crear efecto de partículas
+        function createParticles() {
+            const particleCount = 15;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                // Tamaño y posición aleatorios
+                const size = Math.random() * 4 + 2;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = `${Math.random() * 100}vw`;
+                particle.style.top = `${-Math.random() * 100}px`;
+                
+                // Animación con duración aleatoria
+                const duration = Math.random() * 8 + 6;
+                particle.style.animationDuration = `${duration}s`;
+                particle.style.opacity = Math.random() * 0.4 + 0.2;
+                
+                document.body.appendChild(particle);
+                
+                // Eliminar partícula después de animación
+                setTimeout(() => {
+                    particle.remove();
+                }, duration * 1000);
+            }
+        }
+        
+        // Crear partículas continuamente
+        setInterval(createParticles, 800);
+        
+        // Crear partículas iniciales
+        createParticles();
+        
+        // Control de música
+        const audio = document.getElementById('backgroundMusic');
+        const audioControl = document.getElementById('audioControl');
+        const volumeSlider = document.getElementById('volumeSlider');
+        let isPlaying = false;
+        
+        // Configurar volumen inicial
+        audio.volume = 0.5;
+        
+        // Reproducir música con interacción del usuario
+        document.body.addEventListener('click', function() {
+            if (!isPlaying) {
+                audio.play()
+                    .then(() => {
+                        isPlaying = true;
+                        audioControl.querySelector('.audio-icon').textContent = '♪';
+                        createMusicNotes();
+                    })
+                    .catch(error => {
+                        console.log('La reproducción automática fue prevenida:', error);
+                    });
+            }
+        }, { once: true }); // Solo una vez
+        
+        // Controlar volumen
+        volumeSlider.addEventListener('input', function() {
+            audio.volume = this.value;
+        });
+        
+        // Alternar reproducción/pausa al hacer clic en el icono
+        audioControl.addEventListener('click', function(e) {
+            e.stopPropagation();
+            if (isPlaying) {
+                audio.pause();
+                audioControl.querySelector('.audio-icon').textContent = '♪';
+                isPlaying = false;
+            } else {
+                audio.play();
+                audioControl.querySelector('.audio-icon').textContent = '▮▮';
+                isPlaying = true;
+                createMusicNotes();
+            }
+        });
+        
+        // Crear notas musicales flotantes
+        function createMusicNotes() {
+            if (!isPlaying) return;
+            
+            const note = document.createElement('div');
+            note.className = 'music-note';
+            note.textContent = '♪';
+            note.style.left = `${Math.random() * 100}vw`;
+            note.style.animationDuration = `${Math.random() * 5 + 5}s`;
+            document.body.appendChild(note);
+            
+            // Eliminar la nota después de la animación
+            setTimeout(() => {
+                note.remove();
+            }, 8000);
+            
+            // Crear otra nota si la música está reproduciéndose
+            if (isPlaying) {
+                setTimeout(createMusicNotes, 1000);
+            }
+        }
+    </script>
+</body>
+</html>
